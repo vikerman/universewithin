@@ -17,97 +17,96 @@ BgIndex = 0;
 BgIters = 0; // Number of times we have gone through the levels.
 
 Backgrounds = [];
-var Background = Class.create({
-    initialize: function(speed) {
-        if (BgIndex >= BgList.length) {
-            BgIndex = 0;
-            IterationsCompleted[BgIters] = "1";
-            saveIterationsState();
-            BgIters++;
-	    saveCurrentIterationState();
-        }
-        
-        this.img = Loader.getFile(BgList[BgIndex]);        
-        this.scale = 1.30;
-        this.alpha = 0;
-        this.linked = false;
-        this.speed = speed;
-        this.intransition = false;
-
-        this.bgTheme = Sounds[AudioList[BgIndex++]];
-        if (this.bgTheme) {
-            var loop;
-            var that = this;
-            loop = function() {
-		that.bgTheme.play({
-                    onfinish : function() {
-                        loop();
-                    }});
-            }
-            loop();
-        }
-
-        Backgrounds.push(this);
-        
-        //var that = this;
-        //setTimeout(function() {
-        //    that.transition();
-        //}, 10000);
-    },
+var Background = function(speed) {
+    if (BgIndex >= BgList.length) {
+        BgIndex = 0;
+        IterationsCompleted[BgIters] = "1";
+        saveIterationsState();
+        BgIters++;
+	saveCurrentIterationState();
+    }
     
-    update: function(deltaT) {
-        if (this.intransition) {
-            this.scale += deltaT / 10.0;            
-        } else {
-            this.scale += deltaT * this.speed / 5000.0;
-            if ((this.scale > 0.85) && (this.scale < 1.00)) {
-                this.scale = 1.00;
-            }
-        }
-        
-        if ((this.scale < 100) || (!this.transition)) {
-            this.alpha += deltaT / 5000.0;
-        } else {
-            this.alpha -= deltaT / 1000.0;
-        }
-        
-        if (this.alpha > 1.0) {
-            this.alpha = 1.0;            
-        } else if (this.alpha < 0.0) {
-            this.alpha = 0.0;
-        }
-        
-        if (this.intransition) {
-            if (!this.linked) {
-                new Background(1.0);
-                this.linked = true;
-            }
-        }
-        if (this.scale > 300) {
-            this.destroy();
-        }
-    },
+    this.img = Loader.getFile(BgList[BgIndex]);        
+    this.scale = 1.30;
+    this.alpha = 0;
+    this.linked = false;
+    this.speed = speed;
+    this.intransition = false;
     
-    transition: function() {
-        this.intransition = true;
-    },
-
-    draw: function(deltaT) {
-        Context.globalAlpha = this.alpha;
-        Context.drawImage(this.img, 
-                          (Viewport.width / 2  
-			   - this.img.width / 2 * this.scale),
-                          (Viewport.height / 2
-			   - this.img.height / 2 * this.scale),
-                          this.img.width * this.scale,
-                          this.img.height * this.scale);
-        Context.globalAlpha = 1.0;
-    },
-
-    destroy : function() {
-        if (this.bgTheme) {
-            this.bgTheme.stop();
+    this.bgTheme = Sounds[AudioList[BgIndex++]];
+    if (this.bgTheme) {
+        var loop;
+        var that = this;
+        loop = function() {
+	    that.bgTheme.play({
+                onfinish : function() {
+                    loop();
+                }});
         }
-        destroyObject(Backgrounds, this);
-    },
-});
+        loop();
+    }
+    
+    Backgrounds.push(this);
+    
+    //var that = this;
+    //setTimeout(function() {
+    //    that.transition();
+    //}, 10000);
+}
+
+
+Background.prototype.update = function(deltaT) {
+    if (this.intransition) {
+        this.scale += deltaT / 10.0;            
+    } else {
+        this.scale += deltaT * this.speed / 5000.0;
+        if ((this.scale > 0.85) && (this.scale < 1.00)) {
+            this.scale = 1.00;
+        }
+    }
+    
+    if ((this.scale < 100) || (!this.transition)) {
+        this.alpha += deltaT / 5000.0;
+    } else {
+        this.alpha -= deltaT / 1000.0;
+    }
+    
+    if (this.alpha > 1.0) {
+        this.alpha = 1.0;            
+    } else if (this.alpha < 0.0) {
+        this.alpha = 0.0;
+    }
+    
+    if (this.intransition) {
+        if (!this.linked) {
+            new Background(1.0);
+            this.linked = true;
+        }
+    }
+    if (this.scale > 300) {
+        this.destroy();
+    }
+}
+
+Background.prototype.transition = function() {
+    this.intransition = true;
+}
+
+Background.prototype.draw =  function(deltaT) {
+    Context.globalAlpha = this.alpha;
+    Context.drawImage(this.img, 
+                      (Viewport.width / 2  
+		       - this.img.width / 2 * this.scale),
+                      (Viewport.height / 2
+		       - this.img.height / 2 * this.scale),
+                      this.img.width * this.scale,
+                      this.img.height * this.scale);
+    Context.globalAlpha = 1.0;
+}
+
+Background.prototype.destroy = function() {
+    if (this.bgTheme) {
+        this.bgTheme.stop();
+    }
+    destroyObject(Backgrounds, this);
+}
