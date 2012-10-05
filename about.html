@@ -1,0 +1,214 @@
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
+	<link rel="icon" type="image/png" href="img/player.png">
+	<meta charset="utf-8">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>the universe within ... a game about our recursive universes.</title>
+  <meta name="description" content="the universe within ... a game about our recursive universes. originally created in under 48 hours for global gam jam 2012. made by (in alphabetical order): Shawn A. Allen, Brian S. Chung, Jordan Joyner, gj lee, Vikram Subramanian." />
+  <meta name="author" content="made by (in alphabetical order): Shawn A. Allen, Brian S. Chung, Jordan Joyner, gj lee, Vikram Subramanian." />
+  <meta name="keywords" content="the universe within ..., global game jam 2012, html5 game, hand-drawn, on-site audio, under 48 hours" />
+
+  <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- CSS: implied media=all -->
+  <!-- CSS concatenated and minified via ant build script-->
+  <link rel="stylesheet" type="text/css" href="universe-style.css" />
+  <!-- end CSS-->
+  
+  <!-- All JavaScript at the bottom, except for Modernizr / Respond.
+       Modernizr enables HTML5 elements & feature detects; Respond is a polyfill for min/max-width CSS3 Media Queries
+       For optimal performance, use a custom Modernizr build: www.modernizr.com/download/ -->
+  <script src="js/libs/modernizr-2.0.6.min.js"></script>
+  <script type="text/javascript">
+  </script>
+
+</head>
+
+<body bgcolor="#fff" style="overflow:none;">
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=137196452960109";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div id="container">
+    <header>
+
+	<div id="main" role="main" 
+	style="width:800px; height:760px; position:absolute; left:50%; top:109px; margin:0px 0 0 -400px;" >
+		
+	  <img src="img/universe.png" width="800px" height="600px" style="opacity:0.33;">
+	  </div>
+	  
+	<div id="overlay" role="overlay" 
+	style="width:1600px; height:1520px; position:fixed; left:50%; top:0px ;margin:0px 0 0 -800px;" >
+		<img src="img/atomic.png" width="1600px" height="1520px" style="opacity:.1;">
+		</div>
+		
+	   <a style="opacity:.5; z-index:-100"  
+		onMouseover="this.style.opacity=0.75; document.getElementById('header').style.backgroundColor='#ccf'" 
+		onMouseout="this.style.opacity=0.5; document.getElementById('header').style.backgroundColor='#fff'"
+		onMousedown="this.style.opacity=1.0; document.getElementById('header').style.backgroundColor='#fee'"
+		onClick="window.parent.document.getElementById('aboutbackdrop').style.visibility='hidden';
+				window.parent.document.getElementById('aboutcontainer').setAttribute('class','hideabout');">
+	  <img id='header' src="about/about_header.png" alt="the universe within ... a game about our recursive universes."
+	  style="background-color:#fff; position:relative;left:50%;margin-left:-175px" />	
+	  </a>
+	  
+	  		<div class="paragraph" style="top:0px">
+			... a game about our recursive universes.
+			<br /><br />we are small objects in the universe. there are many objects that will come our way.
+			<br />our goal is to avoid these objects to continue our cycle.
+			<br/><br/>
+			<b>use left/right arrow keys, or tilt your device</b><br/>
+			'p' key to pause ; 'm' key to mute<br/>
+			there's 1 other key that does something secret.<br/>
+			<br/>
+		</div>
+
+	</header>
+
+    <footer>
+	
+		<div class="name" id="shawn">
+		  <img src="about/about_allen.png" alt="shawn a. allen"/>
+		  <a target="_blank" href="http://www.linkedin.com/in/shawnalexanderallen" class="social linked" title="shawn on linkedin"></a>
+		  <a target="_blank" href="http://www.twitter.com/anuchallenger" class="social twitter" title="shawn on twitter"></a>
+		  <a target="_blank" href="http://www.anewchallengerawaits.com/" class="social webpage" title="shawn's website"></a>
+		</div>
+		
+		<div class="name" id="brian">
+		<img src="about/about_chung.png" alt="brian s. chung"/>
+		<a target="_blank" href="http://www.linkedin.com/in/brianschung/" class="social linked" title="brian on linkedin"></a>
+		<a target="_blank" href="http://www.twitter.com/brianschung" class="social twitter" title="brian on twitter"></a>
+		<a target="_blank" href="http://www.beescee.com/" class="social webpage" title="brian's website"></a>
+		</div>
+
+		<div class="name" id="jordan">
+		<img src="about/about_joyner.png" alt="jordan joyner"/>
+		<a target="_blank" href="http://www.linkedin.com/in/jordanjoyner" class="social linked" title="jordan on linkedin"></a>
+		<a target="_blank" href="https://twitter.com/kingtarutaru" class="social twitter" title="jordan on twitter"></a>
+		<a target="_blank" href="http://www.jordanjoyer.com/" class="social webpage" title="jordan's website"></a>
+		</div>
+		
+		<div class="name" id="gj">
+		<img src="about/about_lee.png" alt="gj lee"/>
+		<a target="_blank" href="http://www.linkedin.com/in/leegj" class="social linked" title="gj on linkedin"></a>
+		<a target="_blank" href="https://twitter.com/geeeeeejay" class="social twitter" title="gj on twitter"></a>
+		<a target="_blank" href="http://www.leegj.com" class="social webpage" title="gj's website"></a>
+		</div>
+		
+		<div class="name" id="vikram">
+		<img src="about/about_subramanian.png" alt="vikram subramanian" />
+		<a target="_blank" href="http://www.linkedin.com/pub/vikram-subramanian/9/342/5b6" class="social linked" title="vikram on linkedin"></a>
+		<a target="_blank" href="http://www.twitter.com/vikerman" class="social twitter" title="vikram on twitter"></a>
+		<a target="_blank" href="http://indie-indian.blogspot.com" class="social webpage" title="vikram's website"></a>
+		</div>
+
+		<div class="paragraph">
+			<b>originally created in under 48 hours for global gam jam 2012</b><br/>
+			infinite cycle of creation & learning; hand-drawn, with audio recorded on-site;<br/>
+			the embodiment of the <a target="_blank" href="http://en.wikipedia.org/wiki/Ouroboros">ouroboros</a>: <i>"The Ouroboros represents the <br/>perpetual cyclic renewal of life and infinity, the concept of <br/>eternity and the eternal return, and represents the cycle of life, <br/>death and rebirth, leading to immortality, as in the phoenix."</i>
+			
+			<br/><br/>
+			<div onMouseOver="document.getElementById('easter_frank').style.visibility='visible'" 
+			onMouseOut="document.getElementById('easter_frank').style.visibility='hidden'"
+			><b>awarded "best overall game" at the nyu game center location</b><br/>
+			"Mac user pro-tip: play universe within by standing up, holding your <br/>macbook waist-high and looking down"
+			- Frank Lantz <a href="http://www.twitter.com/flantz" target="_blank">@flantz</a></div>
+			<br/><br/>
+			
+			<img src="about/easter_frank.jpg" height="200" id="easter_frank" style="visibility:hidden;position:absolute;top:0;right:0;pointer-events:none;">
+			
+			featured on <a href="http://www.kotaku.com/5880467/" target="_blank">kotaku</a>:
+			<b>"This 48-hour game lets you fly through the galaxy and into one man's mind.</b><br/>How can a game made over the course of a weekend remind me of Rez and Crayon Physics Deluxe?"
+			<br/>"Beautiful. Engaging." - Evan Narcisse <a href="http://www.twitter.com/EvNarc" target="_blank">@EvNarc</a>
+			
+			<br/><br/>
+			mentioned on <a href="http://www.indiegames.com/2012/02/global_game_jam_2012_a_collect.html" target="_blank">indiegames weblog</a>: "Dazzling." - John Polson <a href="http://www.twitter.com/JohnPolson" target="_blank">@JohnPolson</a>
+			<br/><br/>
+			share with someone in your universe.
+
+		<!-- tweet -->
+		<div style="position:relative;top:10px;left:0px;">
+		<a href="http://twitter.com/share" class="twitter-share-button" data-url="universewithin.net" data-text="the universe within ... a game about our recursive universes ... http://www.universewithin.net/" data-count="none">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+		</div>
+		<!-- fb -->
+			<div style="position:relative;top:10px;left:22.5px;"><div class="fb-like" data-href="http://www.universewithin.net" data-send="false" data-layout="button_count" data-show-faces="false" data-font="tahoma"></div></div>
+		<!-- g+ -->
+		<div style="position:relative;top:12px;left:0px;">
+		<div class="g-plusone" data-size="medium" data-annotation="none" data-href="http://www.universewithin.net"></div>
+			  <script type="text/javascript">
+				(function() {
+					var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+					po.src = 'https://apis.google.com/js/plusone.js';
+					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+				})();
+				</script>
+				</div>
+				
+				<br/><br/><br/><br/><br/>
+				<a href="http://chrome.google.com/webstore/detail/cfahikbimaanioedfdlhhlmbhjogalii" target="_blank">
+				the universe within ... <br/>
+				available free in the chrome web store
+				<br/><img src="about/chrome.png" height="50" style="border:1px solid #69c;" alt="the universe within ... is available in the chrome web store" title="visit the universe within ... in the chrome web store"/></a>
+				<br/>kindly leave us a review or a +1 ...
+				<br/><br/>
+				<br/><br/>
+				<a href="http://itunes.apple.com/us/app/universe-within/id523392835" target="_blank">
+				the universe within ...<br/>
+				... available free on the iPad ...<br/>
+				<img src="about/app-store-ipad.png" height="50" style="border:0px solid #000;"
+				alt="the universe within ... is available free on the iPad!" title="visit the universe within ... in the itunes app store!"/></a>
+				<br/>kindly leave us a review or a rating ...
+				<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		</div>
+		</footer>
+		
+		
+	</div> <!--! end of #container -->
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+      <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+      <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+      <![endif]-->  
+
+	  
+	
+		</div>
+<script type="text/javascript">
+  var _sf_async_config = { uid: 33026, domain: 'universewithin.net' };
+  (function() {
+    function loadChartbeat() {
+      window._sf_endpt = (new Date()).getTime();
+      var e = document.createElement('script');
+      e.setAttribute('language', 'javascript');
+      e.setAttribute('type', 'text/javascript');
+      e.setAttribute('src',
+        (("https:" == document.location.protocol) ? "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" : "http://static.chartbeat.com/") +
+        "js/chartbeat.js");
+      document.body.appendChild(e);
+    };
+    var oldonload = window.onload;
+    window.onload = (typeof window.onload != 'function') ?
+      loadChartbeat : function() { oldonload(); loadChartbeat(); };
+  })();
+</script>
+	</body>
+</html>
