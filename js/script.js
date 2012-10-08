@@ -121,6 +121,9 @@ var LastIterationSelected = 0;
 var randomSprites = false;
 
 var Viewport = {width : 800, height : 600};
+var XOffset, YOffset;
+var Scale;
+
 var Loader;
 var Sounds = [];
 var AssetsLoaded = false;
@@ -130,6 +133,7 @@ var Canvas, Context;
 var level;
 var gameSpeed;
 var resetting;
+var LevelDist = 150;
 var PlayerDist = 250;
 var PlayerSize = 15;
 var Avatar;
@@ -146,9 +150,22 @@ function main(hasSound) {
     Context = Canvas.getContext("2d");
     
     // Scale viewport to canvas.
-    Context.scale(Canvas.width * 1.0 / Viewport.width,
-		  Canvas.height * 1.0 / Viewport.height);
+    var wscale = Canvas.width * 1.0 / Viewport.width;
+    var hscale = Canvas.height * 1.0 / Viewport.height;
+
+    Scale = Math.max(wscale, hscale);
+
+    // We will have to center the viewport such that the main 
+    // playing part is visible.
+    XOffset = (Canvas.width - Viewport.width * Scale) / 2;
+    YOffset = (Canvas.height - Viewport.height * Scale);
     
+    //console.log("Scale: " + Scale);
+    //console.log("XOffset: " + XOffset + " YOffset: " + YOffset);
+
+    Context.translate(XOffset, YOffset);
+    Context.scale(Scale, Scale); 
+
     // Pause on window focus shift.
     if (!debug) {	
 	window.onblur = function() {
@@ -227,7 +244,7 @@ function loadScreen() {
     var x = 0, y = 0;
     var checkForLoaded = false;
     var loadScreen = function() {
-        theta += 10;
+        theta += 20;
         if (theta >= 360) {
             theta -= 360;
             checkForLoaded = true;
@@ -286,22 +303,22 @@ function loadScreen() {
                           Viewport.height/2 - loading.height / 2, 
                           loading.width, loading.height);
 
-        for (var deg = 0; deg < 360; deg += 10) {
+        for (var deg = 0; deg < 360; deg += 20) {
             if (deg != theta) {
                 Context.globalAlpha = 0.5;
             }
         
             var x = Viewport.width / 2 
-                + PlayerDist * Math.cos((270 + deg) * Math.PI / 180);
+                + LevelDist * Math.cos((270 + deg) * Math.PI / 180);
             var y = Viewport.height / 2 
-                - PlayerDist * Math.sin((270 + deg) * Math.PI / 180);
-    
+                - LevelDist * Math.sin((270 + deg) * Math.PI / 180);
+  
             Context.drawImage(img, x - PlayerSize, y - PlayerSize, 
                               PlayerSize * 2, PlayerSize * 2);
 
             Context.globalAlpha = 1.0;
         }
-        
+
         setTimeout(loadScreen, 30);
     }
     
@@ -505,12 +522,15 @@ function draw(deltaT) {
             }
             
             var x = Viewport.width / 2 
-                + (PlayerDist - PlayerSize * 4) * Math.cos(deg * Math.PI / 180);
+                + LevelDist * Math.cos(deg * Math.PI / 180);
             var y = Viewport.height / 2 
-                - (PlayerDist - PlayerSize * 4) * Math.sin(deg * Math.PI / 180);
+                - LevelDist * Math.sin(deg * Math.PI / 180);
 
-            if (((MouseX - x) * (MouseX - x) + 
-                 (MouseY - y) * (MouseY - y)) < PlayerSize * PlayerSize * 4) {
+	    var m = MapToViewport(MouseX, MouseY);
+	    
+            if (((m.x - x) * (m.x - x) + 
+                 (m.y - y) * (m.y - y))
+		< PlayerSize * PlayerSize * Scale * Scale * 4) {
 
                 IterationSelected = i;
 
@@ -631,6 +651,13 @@ function mousemove(e) {
     getMousePos(e);
 }
 
+function MapToViewport(x, y) {
+    var mx = (-XOffset + x) / Scale;
+    var my = (-YOffset + y) / Scale;
+
+    return {"x" : mx, "y" : my};
+}
+
 function mousedown(e) {
     
     if ((e.which) && (e.which != 1)) {
@@ -650,12 +677,16 @@ function mousedown(e) {
 	    var deg = 270 + (i - BgIters) * 360 / 7;
 	    
 	    var x = Viewport.width / 2 
-                + (PlayerDist - PlayerSize * 4) * Math.cos(deg * Math.PI / 180);
+		+ LevelDist * Math.cos(deg * Math.PI / 180);
             var y = Viewport.height / 2 
-                - (PlayerDist - PlayerSize * 4) * Math.sin(deg * Math.PI / 180);
+		- LevelDist * Math.sin(deg * Math.PI / 180);
 	    
-            if (((MouseX - x) * (MouseX - x) + 
-                 (MouseY - y) * (MouseY - y)) < PlayerSize * PlayerSize * 4) {
+	    // Map the mouse position to Viewport co-ordinates.
+	    var m = MapToViewport(MouseX, MouseY);
+
+            if (((m.x - x) * (m.x - x) + 
+                 (m.y - y) * (m.y - y)) 
+		< PlayerSize * PlayerSize * Scale * Scale * 4) {
 		
                 IterationSelected = i;
 	    }
