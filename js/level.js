@@ -146,10 +146,10 @@ Level.prototype.reset = function()
     Avatar.keyCode = 0;
     resetting = true;
     
-    var rev =  Sounds["sound/pianoreverse.mp3"];
+    var rev =  SoundMan.getSound("sound/pianoreverse.mp3");
     if (rev) {
         rev.play();
-    }   
+    }
     
     new Backup(1.0);
 }

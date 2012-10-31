@@ -1,5 +1,5 @@
 application: universeswithin
-version: 1
+version: 2
 runtime: python
 api_version: 1
 
@@ -173,12 +173,12 @@ handlers:
 
 # index files
 - url: /(.*)/
-  static_files: \1/index.html
-  upload: (.*)/index.html
+  static_files: \1/desktop.html
+  upload: (.*)/desktop.html
   expiration: "0m"
 
 # site root
 - url: /
-  static_files: index.html
-  upload: index.html
+  static_files: desktop.html
+  upload: desktop.html
   expiration: "0m"

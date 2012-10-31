@@ -33,17 +33,9 @@ var Background = function(speed) {
     this.speed = speed;
     this.intransition = false;
     
-    this.bgTheme = Sounds[AudioList[BgIndex++]];
+    this.bgTheme = SoundMan.getSound(AudioList[BgIndex++]);
     if (this.bgTheme) {
-        var loop;
-        var that = this;
-        loop = function() {
-	    that.bgTheme.play({
-                onfinish : function() {
-                    loop();
-                }});
-        }
-        loop();
+	this.bgTheme.play(true);
     }
     
     Backgrounds.push(this);

@@ -1,6 +1,5 @@
 //-----------Helper functions-----------------
 var SoundFiles = [
-    "sound/0-piano.mp3",
     "sound/1-whirring.mp3",
     "sound/3-birds.mp3",
     "sound/4-street.mp3",
@@ -128,7 +127,6 @@ var Loader;
 var Sounds = [];
 var AssetsLoaded = false;
 var StartGame = false;
-var Canvas, Context;
 
 var level;
 var gameSpeed;
@@ -146,19 +144,20 @@ var now = null;
 
 // This is the first entry point in the script.
 function main(hasSound) {
-    Canvas = document.getElementById("canvas");
-    Context = Canvas.getContext("2d");
-    
+
+    console.log("Canvas Width : " + _Canvas.width);
+    console.log("Canvas Height : " + _Canvas.height);
+
     // Scale viewport to canvas.
-    var wscale = Canvas.width * 1.0 / Viewport.width;
-    var hscale = Canvas.height * 1.0 / Viewport.height;
+    var wscale = _Canvas.width * 1.0 / Viewport.width;
+    var hscale = _Canvas.height * 1.0 / Viewport.height;
 
     Scale = Math.max(wscale, hscale);
 
     // We will have to center the viewport such that the main 
     // playing part is visible.
-    XOffset = (Canvas.width - Viewport.width * Scale) / 2;
-    YOffset = (Canvas.height - Viewport.height * Scale);
+    XOffset = (_Canvas.width - Viewport.width * Scale) / 2;
+    YOffset = (_Canvas.height - Viewport.height * Scale);
     
     //console.log("Scale: " + Scale);
     //console.log("XOffset: " + XOffset + " YOffset: " + YOffset);
@@ -191,7 +190,9 @@ function main(hasSound) {
     }
     
     if (hasSound) {
-	loadSounds(SoundFiles, function() { loadImages(); });
+	SoundMan.init(function() {
+	    SoundMan.loadFiles(SoundFiles, function() { loadImages(); });
+	});
     } else {
 	loadImages();
     }
@@ -332,43 +333,43 @@ function loadScreen() {
 }
 
 function loadSounds(sounds, onloaded) {
-    var callback;
-    callback = function(i) {       
-        Sounds[sounds[i]] = 
-            soundManager.createSound({
-                id: sounds[i],
-                url: sounds[i],
-                autoLoad: true,
-                autoPlay: false,
-                onload: function() {
-                    if (++i < sounds.length) {
-                        callback(i);
-                    } else {                        
-                        onloaded();
-                    }
-                },
-                onerror: function() {
-                    loadImages();
-                },
-            });
-    }    
-    callback(0);
+}
+
+Loader = {
+    images : [],
+    load : function(files, onloaded) {
+	var loaded = 0;
+	var callback = function() {
+	    if (++loaded == files.length) {
+		onloaded();
+	    }
+	}
+	for (var i = 0 ; i < files.length; i++) {
+	    var img = new Image();
+	    img.onload = callback;
+	    img.src = files[i];	    
+	    Loader.images[files[i]] = img;
+	}
+    },
+    getFile : function(file) {
+	if (Loader.images[file]) {
+	    return Loader.images[file];
+	} else {
+	    return null;
+	}
+    }
 }
 
 function loadImages() {    
-    var loaded = false;
-    Loader = new html5Preloader();
-
-    Loader.onfinish = function() {      
+    var loaded = false;    
+    Loader.load(ImageFiles, function() {
         if (loaded) {
             return;
         }
         loaded = true;
         AssetsLoaded = true;
         startGame();
-    }
-
-    Loader.addFiles.apply(Loader, ImageFiles);
+    });
 }
 
 function startGame() {
@@ -391,8 +392,17 @@ function init() {
     gameSpeed = INITIAL_GAME_SPEED;
     document.onkeydown = keydown;
     document.onkeyup = keyup;
-    Canvas.onmousemove = mousemove;
-    Canvas.onmousedown = mousedown;
+    _Canvas.onmousemove = mousemove;
+    _Canvas.onmousedown = mousedown;
+
+    document.addEventListener("touchstart", handleTouch);
+
+    /*
+    if (typeof(Canvas) != "undefined") {
+	Canvas.addEventListener('touchstart', handleTouch, false);
+    }
+    */
+
     if (window.DeviceOrientationEvent) {
 	window.addEventListener('deviceorientation', onOrientation, false);
     }
@@ -410,7 +420,7 @@ function init() {
     /* Disabling - might be too confusing
     getMuteState();
     if (muted) {
-        soundManager.mute();
+        SoundMan.mute();
         showMute();
     } 
     */
@@ -556,6 +566,10 @@ function draw(deltaT) {
 
 	Context.globalAlpha = 1.0;
     }
+    
+    if (Context.present) {
+	Context.present();
+    }
 }
 
 function clear() {
@@ -567,27 +581,27 @@ function clear() {
 function pause() {
     gamePaused = true;
     if (!muted) {
-	soundManager.mute();
+	SoundMan.mute();
     }
 }
 
 function unpause() {
     gamePaused = false;
     if (!muted) {
-	soundManager.unmute();
+	SoundMan.unmute();
     }
 }
 
 function mute() {
     muted = true;
-    soundManager.mute();
+    SoundMan.mute();
     showMute();
     setMuteState();
 }
 
 function unmute() {
     muted = false;
-    soundManager.unmute();
+    SoundMan.unmute();
     showUnmute();
     setMuteState();
 }
@@ -624,8 +638,20 @@ function keyup(e) {
 }
 
 function onOrientation(e) {
-    if (!resetting) {
+    if (!resetting && (typeof(Avatar) != "undefined")) {
         Avatar.OnOrientation(e);
+    }
+}
+
+function setOrientation(x) {
+    var deg = x * 90;
+    var e = {gamma: deg};
+    onOrientation(e);
+}
+
+function cheat() {
+    if ((typeof(level) != "undefined") && !resetting && !gamePaused) {
+	level.cheat();
     }
 }
 
@@ -641,7 +667,7 @@ function getOffset( el ) {
 }
 
 function getMousePos(e) {
-    var canvasPos = getOffset(Canvas);
+    var canvasPos = getOffset(_Canvas);
     
     MouseX = e.clientX - canvasPos.left + 8;
     MouseY = e.clientY - canvasPos.top + 8;
@@ -658,21 +684,33 @@ function MapToViewport(x, y) {
     return {"x" : mx, "y" : my};
 }
 
+function handleTouch(x, y) {
+    MouseX = x;
+    MouseY = y;
+    
+    handleClick();
+}
+
 function mousedown(e) {
+    
+    // Find out the latest selection.	
+    getMousePos(e);
     
     if ((e.which) && (e.which != 1)) {
 	return; // Not left button. Do nothing.
     }
 	
+    handleClick();
+}
+
+function handleClick() {
     if (!StartGame) {
 	return; // Don't pause in the load screen.
     }
-
+    
     if (gamePaused) {
 	IterationSelected = -1;
 	
-	// Find out the latest selection.	
-	getMousePos(e);
         for (var i = 0; i < 7; i++) {
 	    var deg = 270 + (i - BgIters) * 360 / 7;
 	    

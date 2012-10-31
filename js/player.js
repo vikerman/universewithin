@@ -98,11 +98,13 @@ Player.prototype.update = function(deltaT) {
         this.fillColor = "red";
         this.deg = 270;
 	
-        trackLevelDied();
+	if (typeof(trackLevelDied) != 'undefined') {
+            trackLevelDied();
+	}
 	
         Blocks = [];
         level.reset();
-        var hit = Sounds["sound/hit.mp3"];
+        var hit = SoundMan.getSound("sound/hit.mp3");
         if (hit) {
             hit.play();
         }
