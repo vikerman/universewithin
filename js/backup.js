@@ -47,15 +47,15 @@ Backup.prototype.update = function(deltaT) {
 }
 
 Backup.prototype.draw =  function(deltaT) {
-    Context.globalAlpha = this.alpha;
-    Context.drawImage(this.img, 
+    _Context.globalAlpha = this.alpha;
+    _Context.drawImage(this.img, 
                       (Viewport.width / 2  
 		       - this.img.width / 2 * this.scale),
                       (Viewport.height / 2 
                        - this.img.height / 2 * this.scale),
                       this.img.width * this.scale,
                       this.img.height * this.scale);
-    Context.globalAlpha = 1.0;
+    _Context.globalAlpha = 1.0;
 }
 
 Backup.prototype.destroy = function() {

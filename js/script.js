@@ -162,8 +162,8 @@ function main(hasSound) {
     //console.log("Scale: " + Scale);
     //console.log("XOffset: " + XOffset + " YOffset: " + YOffset);
 
-    Context.translate(XOffset, YOffset);
-    Context.scale(Scale, Scale); 
+    _Context.translate(XOffset, YOffset);
+    _Context.scale(Scale, Scale); 
 
     // Pause on window focus shift.
     if (!debug) {	
@@ -279,14 +279,14 @@ function loadScreen() {
                     var x = 0;
                     var y = PlayerDist;
                     
-                    Context.save();
-                    Context.translate(Viewport.width / 2 + x,
+                    _Context.save();
+                    _Context.translate(Viewport.width / 2 + x,
                                       Viewport.height / 2 + y);             
-                    Context.rotate(rot * Math.PI / 180.0);
-                    Context.drawImage(img,
+                    _Context.rotate(rot * Math.PI / 180.0);
+                    _Context.drawImage(img,
                                       -size, -size, 
                                       size * 2, size * 2);
-                    Context.restore();
+                    _Context.restore();
 
                     setTimeout(loadPulse, 30);
                 }
@@ -299,14 +299,14 @@ function loadScreen() {
         }
 
         clear();
-        Context.drawImage(loading,
+        _Context.drawImage(loading,
                           Viewport.width/2 - loading.width / 2,
                           Viewport.height/2 - loading.height / 2, 
                           loading.width, loading.height);
 
         for (var deg = 0; deg < 360; deg += 20) {
             if (deg != theta) {
-                Context.globalAlpha = 0.5;
+                _Context.globalAlpha = 0.5;
             }
         
             var x = Viewport.width / 2 
@@ -314,10 +314,10 @@ function loadScreen() {
             var y = Viewport.height / 2 
                 - LevelDist * Math.sin((270 + deg) * Math.PI / 180);
   
-            Context.drawImage(img, x - PlayerSize, y - PlayerSize, 
+            _Context.drawImage(img, x - PlayerSize, y - PlayerSize, 
                               PlayerSize * 2, PlayerSize * 2);
 
-            Context.globalAlpha = 1.0;
+            _Context.globalAlpha = 1.0;
         }
 
         setTimeout(loadScreen, 30);
@@ -395,16 +395,20 @@ function init() {
     _Canvas.onmousemove = mousemove;
     _Canvas.onmousedown = mousedown;
 
-    document.addEventListener("touchstart", handleTouch);
+    if (_Canvas.addEventListener) {
+      _Canvas.addEventListener("touchstart", handleTouch);
+    } else if (typeof(AppMobi) != "undefined") {
+      Canvas.addEventListener("touchstart", handleTouch);
+    }
 
     /*
     if (typeof(Canvas) != "undefined") {
 	Canvas.addEventListener('touchstart', handleTouch, false);
     }
     */
-
-    if (window.DeviceOrientationEvent) {
-	window.addEventListener('deviceorientation', onOrientation, false);
+    
+    if ((typeof(AppMobi) == "undefined") && (window.DeviceOrientationEvent)) {
+      window.addEventListener('deviceorientation', onOrientation, false);
     }
 
     //restoreCurrentIterationState();
@@ -413,8 +417,8 @@ function init() {
     level.LoadWaves(BgIters * BgList.length + 1);
 
     pauseImg = Loader.getFile("img/paused.png");
-    Context.globalAlpha = 1.0;
-    Context.save();    
+    _Context.globalAlpha = 1.0;
+    _Context.save();    
 
     // Load last mute state from local storage.
     /* Disabling - might be too confusing
@@ -478,14 +482,14 @@ function update(deltaT) {
 }
 
 function draw(deltaT) {
-    Context.restore();
-    Context.save();
+    _Context.restore();
+    _Context.save();
     
     clear();
         
-    Context.translate(Viewport.width / 2, Viewport.height / 2);
-    Context.rotate(Math.PI / 180 * (Avatar.deg + 90));
-    Context.translate(-Viewport.width / 2, -Viewport.height / 2);
+    _Context.translate(Viewport.width / 2, Viewport.height / 2);
+    _Context.rotate(Math.PI / 180 * (Avatar.deg + 90));
+    _Context.translate(-Viewport.width / 2, -Viewport.height / 2);
         
     if (resetting) {
         for (var i = 0; i < Backups.length; i++) {
@@ -507,15 +511,15 @@ function draw(deltaT) {
     
     if (gamePaused)
     {
-        Context.restore();
-        Context.save();
+        _Context.restore();
+        _Context.save();
         
-        Context.globalAlpha = 0.5;
-        Context.fillStyle = "rgb(0, 0, 0)";
-        Context.fillRect(0, 0, Viewport.width, Viewport.height);
+        _Context.globalAlpha = 0.5;
+        _Context.fillStyle = "rgb(0, 0, 0)";
+        _Context.fillRect(0, 0, Viewport.width, Viewport.height);
 
-        Context.globalAlpha = 0.9;
-        Context.drawImage(
+        _Context.globalAlpha = 0.9;
+        _Context.drawImage(
             pauseImg,
             (Viewport.width - pauseImg.width) / 2, 
             (Viewport.height - pauseImg.height) / 2, 
@@ -551,31 +555,31 @@ function draw(deltaT) {
             }       
             
 	    if (IterationsCompleted[i] == "0") {
-		Context.globalAlpha = 0.4;
+		_Context.globalAlpha = 0.4;
 	    } else {
-		Context.globalAlpha = 1.0;
+		_Context.globalAlpha = 1.0;
 	    }
 
-	    Context.save();
-	    Context.translate(x, y);
-	    Context.rotate(LevelImageRot[i] * Math.PI / 180);
-	    Context.drawImage(img, -PlayerSize * 2, -PlayerSize * 2, 
+	    _Context.save();
+	    _Context.translate(x, y);
+	    _Context.rotate(LevelImageRot[i] * Math.PI / 180);
+	    _Context.drawImage(img, -PlayerSize * 2, -PlayerSize * 2, 
 			      PlayerSize * 4, PlayerSize * 4);
-	    Context.restore();
+	    _Context.restore();
 	}
 
-	Context.globalAlpha = 1.0;
+	_Context.globalAlpha = 1.0;
     }
     
-    if (Context.present) {
-	Context.present();
+    if (_Context.present) {
+	_Context.present();
     }
 }
 
 function clear() {
-    Context.clearRect(0, 0, Viewport.width, Viewport.height);
-    Context.fillStyle = "rgb(255, 255, 255)";
-    Context.fillRect(0, 0, Viewport.width, Viewport.height);
+    _Context.clearRect(0, 0, Viewport.width, Viewport.height);
+    _Context.fillStyle = "rgb(255, 255, 255)";
+    _Context.fillRect(0, 0, Viewport.width, Viewport.height);
 }
 
 function pause() {
@@ -684,9 +688,9 @@ function MapToViewport(x, y) {
     return {"x" : mx, "y" : my};
 }
 
-function handleTouch(x, y) {
-    MouseX = x;
-    MouseY = y;
+function handleTouch(event) {
+    MouseX = event.touches[0].pageX;
+    MouseY = event.touches[0].pageY;
     
     handleClick();
 }

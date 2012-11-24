@@ -155,15 +155,18 @@ Level.prototype.reset = function()
 }
 
 Level.prototype.keydown =  function(e) {
-    if (e.keyCode == 49)
-    {
-	if (Backgrounds.length <= 3) {
-	    transition();
-	    //this.LoadWaves(BgIndex+1);
-	    this.LoadWaves(BgIters * BgList.length + BgIndex + 1);
-	    this.levelTimer = -1.5;
-	}
-    }	
+  if (e.keyCode == 49) {
+    this.cheat();
+  }
+}
+
+Level.prototype.cheat = function() {
+  if (Backgrounds.length <= 3) {
+    transition();
+    //this.LoadWaves(BgIndex+1);
+    this.LoadWaves(BgIters * BgList.length + BgIndex + 1);
+    this.levelTimer = -1.5;
+  }
 }
     
 Level.prototype.setImage =  function(wave)

@@ -53,7 +53,7 @@
   <script>
     function start() {
       _Canvas = document.getElementById("canvas");
-      Context = _Canvas.getContext("2d");
+      _Context = _Canvas.getContext("2d");
     
       if (navigator.userAgent.indexOf('Android') != -1) {
         main(false); // Load without sound on android for now...

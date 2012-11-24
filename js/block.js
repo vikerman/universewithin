@@ -137,15 +137,15 @@ Block.prototype.update = function(deltaT) {
 Block.prototype.draw = function(deltaT) {
     if(debug)
     {
-	Context.fillStyle = "blue";
-	Context.beginPath();
-	Context.arc(this.x, this.y, this.size*0.75, 0, Math.PI*2, true); 
-	Context.closePath();
-	Context.fill();
+	_Context.fillStyle = "blue";
+	_Context.beginPath();
+	_Context.arc(this.x, this.y, this.size*0.75, 0, Math.PI*2, true); 
+	_Context.closePath();
+	_Context.fill();
     }
     if (!this.animated) {
 	
-	Context.drawImage(
+	_Context.drawImage(
             this.image,
             this.x - this.size, 
             this.y - this.size, 
@@ -157,7 +157,7 @@ Block.prototype.draw = function(deltaT) {
 	
         if (this.animTime < 100) {
             // Frame 1
-            Context.drawImage(
+            _Context.drawImage(
                 this.image,
                 0, 0, 
                 this.image.width / 2, this.image.height,
@@ -165,7 +165,7 @@ Block.prototype.draw = function(deltaT) {
                 this.size * 2, this.size * 2);
         } else {
             // Frame 2
-            Context.drawImage(
+            _Context.drawImage(
                 this.image,
                 this.image.width / 2, 0, 
                 this.image.width / 2, this.image.height,

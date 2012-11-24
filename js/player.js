@@ -128,14 +128,14 @@ Player.prototype.draw = function(deltaT) {
     }
     
     /*
-      Context.fillStyle = this.fillColor;
-      Context.beginPath();
-      Context.arc(this.x, this.y, this.size+1, 0, Math.PI*2, true); 
-      Context.closePath();
-      Context.fill();*/
+      _Context.fillStyle = this.fillColor;
+      _Context.beginPath();
+      _Context.arc(this.x, this.y, this.size+1, 0, Math.PI*2, true); 
+      _Context.closePath();
+      _Context.fill();*/
     
     
-    Context.drawImage(
+    _Context.drawImage(
         this.img,
         this.x - this.size, 
         this.y - this.size, 

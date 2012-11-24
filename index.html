@@ -18,7 +18,7 @@
   <!-- Mobile viewport optimized: j.mp/bplateviewport -->
   <meta name="viewport"
         content="width=device-width,initial-scale=1,
-                 maximum-sacle=1.0, user-scalable=no;" />
+                 maximum-scale=1.0,user-scalable=no" />
 
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
 
@@ -35,75 +35,86 @@
 
       document.removeEventListener("appMobi.device.ready",
         onDeviceReady, false);
+
+      // Figure out the device orientation based on screen resolution.
       AppMobi.device.setRotateOrientation("potrait");
       AppMobi.device.setAutoRotate(false);
       AppMobi.device.managePower(true, false);
       AppMobi.device.hideStatusBar();
-      
-      AppMobi.canvas.load("js/sound.js");
-      AppMobi.canvas.load("js/script.js");
-      AppMobi.canvas.load("js/player.js");
-      AppMobi.canvas.load("js/block.js");
-      AppMobi.canvas.load("js/level.js");
-      AppMobi.canvas.load("js/backup.js");
-      AppMobi.canvas.load("js/background.js");
-      AppMobi.canvas.load("leveldata/patterns.js");
+            
+      AppMobi.canvas.load("compiled.js");
+      /*
+      AppMobi.canvas.execute("AppMobi.context.include('js/sound.js');");
+      AppMobi.canvas.execute("AppMobi.context.include('js/player.js')");
+      AppMobi.canvas.execute("AppMobi.context.include('js/block.js');");
+      AppMobi.canvas.execute("AppMobi.context.include('js/level.js');");
+      AppMobi.canvas.execute("AppMobi.context.include('js/backup.js');");
+      AppMobi.canvas.execute("AppMobi.context.include('js/background.js');");
+      AppMobi.canvas.execute("ApppMobi.context.include('leveldata/patterns.js');");   
+      */
+
+      //var width = AppMobi.display.window.landwidth;
+      //var height = AppMobi.display.window.landheight;
 
       //var width = window.innerWidth;
       //var height = window.innerHeight;
       //AppMobi.debug.log("width: " + width);
       //AppMobi.debug.log("height: " + height);
 
-      AppMobi.canvas.execute("_Canvas = {width : window.innerWidth" 
-                             + ", height : window.innerHeight};");
+      window.setTimeout(function() {
+        AppMobi.debug.log("Hello World!");
+        AppMobi.canvas.execute("_Canvas = {width : window.innerWidth" 
+                               + ", height : window.innerHeight};");
 
-      AppMobi.canvas.execute("Context = AppMobi.canvas.context;");
+        AppMobi.canvas.execute("_Context = AppMobi.canvas.getContext('2d');");
 
-      AppMobi.exec("AppMobiDevice.hideWebView");
-      AppMobi.device.hideSplashScreen();
+        AppMobi.exec("AppMobiDevice.hideWebView");
+        AppMobi.device.hideSplashScreen();
 
-      AppMobi.canvas.execute("main(true);");
+        AppMobi.canvas.execute("main(true);");
 
-      var L0AccelerationIsShaking = function(last, accel, threshold) {
-        var deltaX = Math.abs(last.x - accel.x);
-        var deltaY = Math.abs(last.y - accel.y);
-        var deltaZ = Math.abs(last.z - accel.z);
+        var L0AccelerationIsShaking = function(last, accel, threshold) {
+          var deltaX = Math.abs(last.x - accel.x);
+          var deltaY = Math.abs(last.y - accel.y);
+          var deltaZ = Math.abs(last.z - accel.z);
 
-        return ((deltaX > threshold && deltaY > threshold) ||
-                (deltaX > threshold && deltaZ > threshold) ||
-                (deltaY > threshold && deltaZ > threshold));
-      }
-
-      var lastAccel = null;
-      var shaken = false;
-      var frame = 0;
-      var shakeFrame = 0;
-      var onAccel = function(accel) {
-        try {
-          AppMobi.canvas.execute("setOrientation(" + accel.x + ");");
-
-          // Detect shake.
-          frame++;
-          if (lastAccel) {
-            if (!shaken && L0AccelerationIsShaking(lastAccel, accel, 0.8)
-                && (frame - shakeFrame > 75)) {
-              shaken = true;
-              shakeFrame = frame;
-              AppMobi.canvas.execute("cheat();");
-            } else {
-              shaken = false;
-            }
-          }
-
-          lastAccel = accel;
-
-        } catch (err) {
-          AppMobi.debug.log(err.message);
+          return ((deltaX > threshold && deltaY > threshold) ||
+                  (deltaX > threshold && deltaZ > threshold) ||
+                  (deltaY > threshold && deltaZ > threshold));
         }
-      }
 
-      var options = { frequency: 30, adjustForRotation: true  };
-      var watchID = AppMobi.accelerometer.watchAcceleration(onAccel, options);
+        var lastAccel = null;
+        var shaken = false;
+        var frame = 0;
+        var shakeFrame = 0;
+        var onAccel = function(accel) {
+          try {
+            AppMobi.canvas.execute("setOrientation(" + accel.x + ");");
+            //AppMobi.debug.log("setOrientation(" + accel.x + ");");
+
+            // Detect shake.
+            frame++;
+            if (lastAccel) {
+              if (!shaken && L0AccelerationIsShaking(lastAccel, accel, 0.8)
+                  && (frame - shakeFrame > 75)) {
+                shaken = true;
+                shakeFrame = frame;
+                AppMobi.canvas.execute("cheat();");
+              } else {
+                shaken = false;
+              }
+            }
+
+            lastAccel = accel;
+
+          } catch (err) {
+            AppMobi.debug.log(err.message);
+          }
+        }
+
+        var options = { frequency: 30, adjustForRotation: true  };
+        var watchID = AppMobi.accelerometer.watchAcceleration(onAccel, options);
+      }, 1000);
     };
 
     document.addEventListener("appMobi.device.ready", onDeviceReady, false);
