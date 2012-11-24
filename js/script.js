@@ -395,9 +395,7 @@ function init() {
     _Canvas.onmousemove = mousemove;
     _Canvas.onmousedown = mousedown;
 
-    if (_Canvas.addEventListener) {
-      _Canvas.addEventListener("touchstart", handleTouch);
-    } else if (typeof(AppMobi) != "undefined") {
+    if (typeof(AppMobi) != "undefined") {
       Canvas.addEventListener("touchstart", handleTouch);
     }
 

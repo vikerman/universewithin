@@ -37,7 +37,19 @@
         onDeviceReady, false);
 
       // Figure out the device orientation based on screen resolution.
-      AppMobi.device.setRotateOrientation("potrait");
+      var width = AppMobi.device.portwidth;
+      var height = AppMobi.device.portheight;
+      AppMobi.debug.log("width: " + width);
+      AppMobi.debug.log("height: " + height);
+
+      var rotated = false;
+      if (width * 1.0 / height < 0.74) {
+        AppMobi.device.setRotateOrientation("potrait");
+      } else {
+        AppMobi.device.setRotateOrientation("landscape");
+        rotated = true;
+      }
+
       AppMobi.device.setAutoRotate(false);
       AppMobi.device.managePower(true, false);
       AppMobi.device.hideStatusBar();
@@ -53,18 +65,16 @@
       AppMobi.canvas.execute("ApppMobi.context.include('leveldata/patterns.js');");   
       */
 
-      //var width = AppMobi.display.window.landwidth;
-      //var height = AppMobi.display.window.landheight;
-
-      //var width = window.innerWidth;
-      //var height = window.innerHeight;
-      //AppMobi.debug.log("width: " + width);
-      //AppMobi.debug.log("height: " + height);
-
       window.setTimeout(function() {
         AppMobi.debug.log("Hello World!");
-        AppMobi.canvas.execute("_Canvas = {width : window.innerWidth" 
-                               + ", height : window.innerHeight};");
+	// Hack for iPad.
+        if (AppMobi.device.model == "iPad") {
+          AppMobi.canvas.execute("_Canvas = {width : 1024" 
+                                 + ", height : 768};");
+        } else {
+          AppMobi.canvas.execute("_Canvas = {width : Canvas.width" 
+                                 + ", height : Canvas.height};");
+        }
 
         AppMobi.canvas.execute("_Context = AppMobi.canvas.getContext('2d');");
 

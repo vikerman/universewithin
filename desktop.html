@@ -20,7 +20,7 @@
   <meta name="keywords" content="the universe within ..., global game jam 2012, html5 game, hand-drawn, on-site audio, under 48 hours" />
 
   <!-- Mobile viewport optimized: j.mp/bplateviewport -->
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=400,initial-scale=1">
 
   <!-- CSS: implied media=all -->
   <!-- CSS concatenated and minified via ant build script-->
@@ -53,10 +53,14 @@
   <script>
     function start() {
       _Canvas = document.getElementById("canvas");
-      _Context = _Canvas.getContext("2d");
-    
-      if (navigator.userAgent.indexOf('Android') != -1) {
-        main(false); // Load without sound on android for now...
+      _Context = _Canvas.getContext("2d");   
+
+      if ((navigator.userAgent.match(/Android/i)) ||
+          (navigator.userAgent.match(/iPhone/i)) ||
+          (navigator.userAgent.match(/iPod/i)) ||
+          (navigator.userAgent.match(/iPad/i))) {
+        window.scrollTo(220, 200);
+        main(false); // Load without sound on mobile browsers for now...
       } else {
         main(true); // Load with sound.
       }
@@ -94,7 +98,7 @@
     <header>
     </header>
     <div id="main" role="main"
-         style="width:800px; height:760px; position:absolute; left:50%; top:0px; margin:0px 0 0 -400px;" >
+         style="width:800px; height:760px; margin-left:auto; margin-right:auto" >
       
 	  <div onMouseover="document.getElementById('instructions').style.opacity=0.5;document.getElementById('pause_mute').style.opacity=0.5;" 
 	  onMouseout="document.getElementById('instructions').style.opacity=0.125;document.getElementById('pause_mute').style.opacity=0.125;">
